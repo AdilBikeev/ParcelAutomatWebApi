@@ -24,7 +24,6 @@ namespace WebApi.Controlles
         /// </summary>
         private void LogConsole(string info) => Console.WriteLine($"{DateTime.Now.ToString("dd/mm/yy hh:mm:ss:mm")} {nameof(OrderController)}: {info}");
 
-
         /// <summary>
         /// Обработка запроса.
         /// </summary>
@@ -105,8 +104,8 @@ namespace WebApi.Controlles
         /// <param name="orderId">Идентификатор заказа.</param>
         /// <response code="200">Заказ успешно отменён.</response>
         /// <response code="400">Процесс отмены заказа завершился ошибкой.</response>
-        // POST api/order/cancel/{orderId}
-        [HttpPost]
+        // PUT api/order/cancel/{orderId}
+        [HttpPut]
         [Route("cancel/{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -143,8 +142,8 @@ namespace WebApi.Controlles
         /// <param name="order">Данные заказа.</param>
         /// <response code="200">Заказ успешно обновлен.</response>
         /// <response code="400">Процесс обновления заказа завершился ошибкой.</response>
-        // POST api/order/update
-        [HttpPost]
+        // PUT api/order/update
+        [HttpPut]
         [Route("update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
