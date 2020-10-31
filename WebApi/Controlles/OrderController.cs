@@ -12,8 +12,9 @@ using WebApi.Models;
 
 namespace WebApi.Controlles
 {
-    [Route("api/order")]
     [ApiController]
+    [Route("api/order")]
+    [Produces("application/json")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepo _orderRepo;
@@ -51,7 +52,7 @@ namespace WebApi.Controlles
         [Route("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<string> CreateOrder(Order order)
+        public JsonResult CreateOrder(Order order)
         {
             try
             {
@@ -59,17 +60,17 @@ namespace WebApi.Controlles
 
                 if (this._orderRepo.CreateOrder(order))
                 {
-                    return Ok(ResponseCode.Ok.ToName());
+                    return new JsonResult(ResponseCode.Ok.ToName());
                 }
                 else
                 {
-                    return BadRequest(ResponseCode.RequestError.ToName());
+                    return new JsonResult(ResponseCode.RequestError.ToName());
                 }
             }
             catch (Exception exc)
             {
                 this.LogConsole($"exception={exc.Message}");
-                return BadRequest(ResponseCode.RequestError.ToName());
+                return new JsonResult(ResponseCode.RequestError.ToName());
             }
         }
     }
