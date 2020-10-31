@@ -149,7 +149,7 @@ namespace WebApi.Models
                 else
                 {
                     throw new ValidationException(
-                        ParcelAutomatController.ResponseCode
+                        OrderController.ResponseCode
                                                .RequestError
                                                .ToName()
                     );

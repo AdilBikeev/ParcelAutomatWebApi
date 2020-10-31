@@ -10,10 +10,10 @@ namespace WebApi.Controlles
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ParcelAutomatController : ControllerBase
+    public class OrderController : ControllerBase
     {
         /// <summary>
-        /// Коды ответа на запросы к контроллеру <see cref="ParcelAutomatController"/>
+        /// Коды ответа на запросы к контроллеру <see cref="OrderController"/>
         /// </summary>
         public enum ResponseCode
         {
