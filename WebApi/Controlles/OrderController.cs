@@ -29,11 +29,17 @@ namespace WebApi.Controlles
         /// </summary>
         public enum ResponseCode
         {
-           [Description("Заказ успешно создан")]
+           [Description("Операция успешно проведена")]
            Ok = 0,
 
+           [Description("Заказ с данным номером уже существует")]
+           OrderAlreadyExist = 5,
+
+           [Description("не найден")]
+           OrderNotFound = 404,
+
            [Description("ошибка запроса")]
-           RequestError = 5
+           RequestError = 400
         }
 
         public OrderController(IOrderRepo orderRepo)
@@ -58,14 +64,33 @@ namespace WebApi.Controlles
             {
                 this.LogConsole(JObject.FromObject(order).ToString());
 
-                if (this._orderRepo.CreateOrder(order))
-                {
-                    return new JsonResult(ResponseCode.Ok.ToName());
-                }
-                else
-                {
-                    return new JsonResult(ResponseCode.RequestError.ToName());
-                }
+                return new JsonResult(this._orderRepo.CreateOrder(order).ToName());
+            }
+            catch (Exception exc)
+            {
+                this.LogConsole($"exception={exc.Message}");
+                return new JsonResult(ResponseCode.RequestError.ToName());
+            }
+        }
+
+        /// <summary>
+        /// Запрос на обновление данных заказа.
+        /// </summary>
+        /// <param name="order">Данные заказа.</param>
+        /// <response code="200">Заказ успешно обновлен.</response>
+        /// <response code="400">Процесс обновления заказа завершился ошибкой.</response>
+        // POST api/order/update
+        [HttpPost]
+        [Route("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public JsonResult UpdateOrder(Order order)
+        {
+            try
+            {
+                this.LogConsole(JObject.FromObject(order).ToString());
+
+                return new JsonResult(this._orderRepo.UpdateOrder(order).ToName());
             }
             catch (Exception exc)
             {

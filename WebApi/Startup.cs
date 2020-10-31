@@ -28,9 +28,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IOrderRepo, MockOrderRepo>();
             services.AddControllers();
-            services.AddScoped<IOrderRepo, MockOrderRepo>();
-
             services.AddSwaggerGen(c =>
             {
                 // Set the comments path for the Swagger JSON and UI.
@@ -43,12 +42,18 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger(c => {
+                c.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", nameof(WebApi));
+            });
 
             app.UseRouting();
 
@@ -57,11 +62,6 @@ namespace WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", nameof(WebApi));
             });
         }
     }
