@@ -24,6 +24,27 @@ namespace WebApi.Controlles
         /// </summary>
         private void LogConsole(string info) => Console.WriteLine($"{DateTime.Now.ToString("dd/mm/yy hh:mm:ss:mm")} {nameof(OrderController)}: {info}");
 
+
+        /// <summary>
+        /// Обработка запроса.
+        /// </summary>
+        /// <param name="order">Данные заказа.</param>
+        /// <param name="proccess">Функция для обработки заказа.</param>
+        private JsonResult ProccessingRequest(Order order, Func<Order, ResponseCode> proccess)
+        {
+            try
+            {
+                this.LogConsole(JObject.FromObject(order).ToString());
+
+                return new JsonResult(proccess(order).ToName());
+            }
+            catch (Exception exc)
+            {
+                this.LogConsole($"exception={exc.Message}");
+                return new JsonResult(ResponseCode.RequestError.ToName());
+            }
+        }
+
         /// <summary>
         /// Коды ответа на запросы к контроллеру <see cref="OrderController"/>
         /// </summary>
@@ -58,20 +79,7 @@ namespace WebApi.Controlles
         [Route("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public JsonResult CreateOrder(Order order)
-        {
-            try
-            {
-                this.LogConsole(JObject.FromObject(order).ToString());
-
-                return new JsonResult(this._orderRepo.CreateOrder(order).ToName());
-            }
-            catch (Exception exc)
-            {
-                this.LogConsole($"exception={exc.Message}");
-                return new JsonResult(ResponseCode.RequestError.ToName());
-            }
-        }
+        public JsonResult CreateOrder(Order order) => ProccessingRequest(order, this._orderRepo.CreateOrder);
 
         /// <summary>
         /// Запрос на обновление данных заказа.
@@ -84,19 +92,6 @@ namespace WebApi.Controlles
         [Route("update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public JsonResult UpdateOrder(Order order)
-        {
-            try
-            {
-                this.LogConsole(JObject.FromObject(order).ToString());
-
-                return new JsonResult(this._orderRepo.UpdateOrder(order).ToName());
-            }
-            catch (Exception exc)
-            {
-                this.LogConsole($"exception={exc.Message}");
-                return new JsonResult(ResponseCode.RequestError.ToName());
-            }
-        }
+        public JsonResult UpdateOrder(Order order) => ProccessingRequest(order, this._orderRepo.UpdateOrder);
     }
 }
