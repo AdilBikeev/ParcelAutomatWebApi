@@ -69,6 +69,37 @@ namespace WebApi.Controlles
         }
 
         /// <summary>
+        /// Запрос на получение данных заказа.
+        /// </summary>
+        /// <param name="orderId">Идентификатор заказа.</param>
+        /// <response code="200">Информация по заказу найдена.</response>
+        /// <response code="400">Процесс нахождения заказа завершился ошибкой.</response>
+        // GET api/order/{orderId}
+        [HttpGet]
+        [Route("{orderId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public JsonResult GetOrder(int orderId)
+        {
+            try
+            {
+                this.LogConsole($"orderId={orderId}");
+                var order = this._orderRepo.GetOrder(orderId);
+                if (order is null)
+                {
+                    return new JsonResult(ResponseCode.OrderNotFound.ToName());
+                }
+
+                return new JsonResult(order);
+            }
+            catch (Exception exc)
+            {
+                this.LogConsole($"exception={exc.Message}");
+                return new JsonResult(ResponseCode.RequestError.ToName());
+            }
+        }
+
+        /// <summary>
         /// Запрос на создание заказа.
         /// </summary>
         /// <param name="order">Данные заказа.</param>

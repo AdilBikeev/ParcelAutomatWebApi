@@ -20,5 +20,11 @@ namespace WebApi.Data.OrderRepo
         /// </summary>
         /// <param name="updOrder">Обновленные данные заказа.</param>
         ResponseCode UpdateOrder(Order updOrder);
+
+        /// <summary>
+        /// Возвращает информацию по orderId.
+        /// </summary>
+        /// <param name="orderId">Идентификатор заказа.</param>
+        Order GetOrder(int orderId);
     }
 }

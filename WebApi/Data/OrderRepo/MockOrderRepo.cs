@@ -55,5 +55,7 @@ namespace WebApi.Data.OrderRepo
 
             return ResponseCode.OrderNotFound;
         }
+
+        public Order GetOrder(int orderId) => this.orders.FirstOrDefault(item => item.Number == orderId);
     }
 }
