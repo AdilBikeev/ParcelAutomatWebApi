@@ -63,7 +63,8 @@ namespace WebApi.Controlles
             }
             catch (Exception exc)
             {
-                return BadRequest(exc.ToString());
+                Console.WriteLine($"{DateTime.Now.ToString("dd/mm/yy hh:mm:ss:mm")} {nameof(OrderController)} exception: {exc.Message}");
+                return BadRequest(ResponseCode.RequestError.ToName());
             }
         }
     }

@@ -52,7 +52,7 @@ namespace WebApi.Models
         /// <summary>
         /// Регулярное выражение для валидации номера телефона.
         /// </summary>
-        private Regex phoneReg = new Regex(@"^\+7\d{3}-\d{3}-\d{4}$");
+        private Regex phoneReg = new Regex(@"^\+7\d{3}-\d{3}-\d{2}-\d{2}$");
 
         private int _status;
         private decimal _price;
@@ -95,13 +95,16 @@ namespace WebApi.Models
             get => this._ordersStructurece;
             set
             {
-                if (value.Length <= _maxOrdersStructurece)
+                if (value != null)
                 {
-                    this._ordersStructurece = value;
-                }
-                else
-                {
-                    throw new ValidationException("Ошибка запроса");
+                    if (value.Length <= _maxOrdersStructurece)
+                    {
+                        this._ordersStructurece = value;
+                    }
+                    else
+                    {
+                        throw new ValidationException("Ошибка запроса");
+                    }
                 }
             }
         }
