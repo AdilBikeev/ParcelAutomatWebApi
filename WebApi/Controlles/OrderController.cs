@@ -19,6 +19,11 @@ namespace WebApi.Controlles
         private readonly IOrderRepo _orderRepo;
 
         /// <summary>
+        /// Логгирует сообщение в консоль. 
+        /// </summary>
+        private void LogConsole(string info) => Console.WriteLine($"{DateTime.Now.ToString("dd/mm/yy hh:mm:ss:mm")} {nameof(OrderController)}: {info}");
+
+        /// <summary>
         /// Коды ответа на запросы к контроллеру <see cref="OrderController"/>
         /// </summary>
         public enum ResponseCode
@@ -50,9 +55,9 @@ namespace WebApi.Controlles
         {
             try
             {
-                Console.WriteLine($"{DateTime.Now.ToString("dd/mm/yy hh:mm:ss:mm")} {nameof(OrderController)}: {JObject.FromObject(order)}");
+                this.LogConsole(JObject.FromObject(order).ToString());
 
-                if (_orderRepo.CreateOrder(order))
+                if (this._orderRepo.CreateOrder(order))
                 {
                     return Ok(ResponseCode.Ok.ToName());
                 }
@@ -63,7 +68,7 @@ namespace WebApi.Controlles
             }
             catch (Exception exc)
             {
-                Console.WriteLine($"{DateTime.Now.ToString("dd/mm/yy hh:mm:ss:mm")} {nameof(OrderController)} exception: {exc.Message}");
+                this.LogConsole($"exception={exc.Message}");
                 return BadRequest(ResponseCode.RequestError.ToName());
             }
         }
