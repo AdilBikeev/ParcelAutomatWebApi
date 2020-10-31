@@ -26,5 +26,11 @@ namespace WebApi.Data.OrderRepo
         /// </summary>
         /// <param name="orderId">Идентификатор заказа.</param>
         Order GetOrder(int orderId);
+
+        /// <summary>
+        /// Отменяет заказ по orderId.
+        /// </summary>
+        /// <param name="orderId">Идентификатор заказа.</param>
+        ResponseCode CancelOrder(int orderId);
     }
 }

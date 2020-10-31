@@ -100,6 +100,31 @@ namespace WebApi.Controlles
         }
 
         /// <summary>
+        /// Запрос на отмену заказа.
+        /// </summary>
+        /// <param name="orderId">Идентификатор заказа.</param>
+        /// <response code="200">Заказ успешно отменён.</response>
+        /// <response code="400">Процесс отмены заказа завершился ошибкой.</response>
+        // POST api/order/cancel/{orderId}
+        [HttpPost]
+        [Route("cancel/{orderId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public JsonResult CancelOrder(int orderId)
+        {
+            try
+            {
+                this.LogConsole($"orderId={orderId}");
+                return new JsonResult(this._orderRepo.CancelOrder(orderId).ToName());
+            }
+            catch (Exception exc)
+            {
+                this.LogConsole($"exception={exc.Message}");
+                return new JsonResult(ResponseCode.RequestError.ToName());
+            }
+        }
+
+        /// <summary>
         /// Запрос на создание заказа.
         /// </summary>
         /// <param name="order">Данные заказа.</param>

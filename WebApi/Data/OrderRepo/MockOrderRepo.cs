@@ -57,5 +57,17 @@ namespace WebApi.Data.OrderRepo
         }
 
         public Order GetOrder(int orderId) => this.orders.FirstOrDefault(item => item.Number == orderId);
+
+        public ResponseCode CancelOrder(int orderId)
+        {
+            var order = this.orders.FirstOrDefault(item => item.Number == orderId);
+            if (order is null)
+            {
+                return ResponseCode.OrderNotFound;
+            }
+
+            order.Status = (int)OrderStatus.Cancelled;
+            return ResponseCode.Ok;
+        }
     }
 }
