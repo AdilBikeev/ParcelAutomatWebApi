@@ -14,13 +14,12 @@ namespace WebApi.Data.ParcelAutomatRepo
         /// </summary>
         private readonly IList<ParcelAutomat> _parcelAutomats = ImmutableList.Create<ParcelAutomat>
         (
-            new ParcelAutomat()
+            new ParcelAutomat("0")
             {
-                NumberPostDeliver = 0,
                 Address = "г. Москва, ул. Пр. Вернадского 78"
             }    
         );
 
-        public ParcelAutomat GetParcelAutomat(int postamatId) => this._parcelAutomats.FirstOrDefault(item => item.NumberPostDeliver == postamatId);
+        public ParcelAutomat GetParcelAutomat(string postamatId) => this._parcelAutomats.FirstOrDefault(item => item._numberPostDeliver == postamatId);
     }
 }

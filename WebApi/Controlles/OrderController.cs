@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using WebApi.Data.OrderRepo;
+using WebApi.Data.ParcelAutomatRepo;
 using WebApi.Models;
 
 namespace WebApi.Controlles
@@ -18,6 +19,7 @@ namespace WebApi.Controlles
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepo _orderRepo;
+        private readonly IParcelAutomatRepo _postamatRepo;
 
         /// <summary>
         /// Логгирует сообщение в консоль. 
@@ -55,16 +57,20 @@ namespace WebApi.Controlles
            [Description("Заказ с данным номером уже существует")]
            OrderAlreadyExist = 5,
 
-           [Description("не найден")]
-           OrderNotFound = 404,
-
            [Description("ошибка запроса")]
-           RequestError = 400
+           RequestError = 400,
+
+           [Description("запрещено")]
+           Forbidden = 403,
+
+           [Description("не найден")]
+           NotFound = 404,
         }
 
-        public OrderController(IOrderRepo orderRepo)
+        public OrderController(IOrderRepo orderRepo, IParcelAutomatRepo postamatRepo)
         {
             this._orderRepo = orderRepo;
+            this._postamatRepo = postamatRepo;
         }
 
         /// <summary>
@@ -86,7 +92,7 @@ namespace WebApi.Controlles
                 var order = this._orderRepo.GetOrder(orderId);
                 if (order is null)
                 {
-                    return new JsonResult(ResponseCode.OrderNotFound.ToName());
+                    return new JsonResult(ResponseCode.NotFound.ToName());
                 }
 
                 return new JsonResult(order);
@@ -129,12 +135,28 @@ namespace WebApi.Controlles
         /// <param name="order">Данные заказа.</param>
         /// <response code="200">Заказ успешно создан.</response>
         /// <response code="400">Процесс добавления заказа завершился ошибкой.</response>
+        /// <response code="403">Запрещено регистрировать заказ на закрытый постамат.</response>
         // POST api/order/create
         [HttpPost]
         [Route("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public JsonResult CreateOrder(Order order) => ProccessingRequest(order, this._orderRepo.CreateOrder);
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public JsonResult CreateOrder(Order order)
+        {
+            var postamat = this._postamatRepo.GetParcelAutomat(order.NumberPostDeliver.ToString());
+
+            if (postamat is null)
+            {
+                return new JsonResult(ResponseCode.NotFound.ToName());
+            }
+            else if (!postamat.IsOpen)
+            {
+                return new JsonResult(ResponseCode.Forbidden.ToName());
+            }
+            
+            return ProccessingRequest(order, this._orderRepo.CreateOrder);
+        }
 
         /// <summary>
         /// Запрос на обновление данных заказа.
