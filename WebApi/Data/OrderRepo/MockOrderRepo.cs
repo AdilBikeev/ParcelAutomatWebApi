@@ -53,7 +53,7 @@ namespace WebApi.Data.OrderRepo
                 return ResponseCode.Ok;
             }
 
-            return ResponseCode.OrderNotFound;
+            return ResponseCode.NotFound;
         }
 
         public Order GetOrder(int orderId) => this.orders.FirstOrDefault(item => item.Number == orderId);
@@ -63,7 +63,7 @@ namespace WebApi.Data.OrderRepo
             var order = this.orders.FirstOrDefault(item => item.Number == orderId);
             if (order is null)
             {
-                return ResponseCode.OrderNotFound;
+                return ResponseCode.NotFound;
             }
 
             order.Status = (int)OrderStatus.Cancelled;

@@ -21,7 +21,7 @@ namespace WebApi.Models
         /// Номер поставмата.
         /// </summary>
         [Key]
-        public int NumberPostDeliver { get; set; }
+        public readonly string _numberPostDeliver;
 
         /// <summary>
         /// Адрес поставмата.
@@ -32,8 +32,13 @@ namespace WebApi.Models
         /// <summary>
         /// Статус поставмата.
         /// </summary>
+        /// <value>true - если в рабочем состоянии (не закрыт).</value>
         [Required]
-        [DefaultValue(_isOpenDefault)]
-        public bool IsOpen { get; set; }
+        public bool IsOpen { get; set; } = _isOpenDefault;
+
+        public ParcelAutomat(string pastomatId)
+        {
+            this._numberPostDeliver = pastomatId;
+        }
     }
 }

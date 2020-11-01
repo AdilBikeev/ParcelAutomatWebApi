@@ -53,7 +53,7 @@ namespace WebApi.Controlles
         [Route("{postamatId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public JsonResult GetPostamat(int postamatId)
+        public JsonResult GetPostamat(string postamatId)
         {
             try
             {

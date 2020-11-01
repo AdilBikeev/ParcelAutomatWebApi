@@ -12,6 +12,6 @@ namespace WebApi.Data.ParcelAutomatRepo
         /// Возвращает инфрмацию о постамате по его идентификатору.
         /// </summary>
         /// <param name="postamatId">Идентификатор постамата.</param>
-        public ParcelAutomat GetParcelAutomat(int postamatId);
+        public ParcelAutomat GetParcelAutomat(string postamatId);
     }
 }

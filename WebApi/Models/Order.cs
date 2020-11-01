@@ -55,7 +55,7 @@ namespace WebApi.Models
         /// </summary>
         private Regex phoneReg = new Regex(@"^\+7\d{3}-\d{3}-\d{2}-\d{2}$");
 
-        private int _status;
+        private int _status = _statusDefault;
         private decimal _price;
         private string[] _ordersStructurece;
         private string _phoneRecipient;
@@ -70,7 +70,6 @@ namespace WebApi.Models
         /// Статус заказа.
         /// </summary>
         [Required]
-        [DefaultValue(_statusDefault)]
         public int Status
         {
             get => this._status;
@@ -104,6 +103,7 @@ namespace WebApi.Models
                     }
                     else
                     {
+                        Console.WriteLine($"Кол-во товаров в 1-ом заказе не должно превышать {_maxOrdersStructurece}");
                         throw new ValidationException("Ошибка запроса");
                     }
                 }
@@ -134,7 +134,6 @@ namespace WebApi.Models
         /// Номер постамата доставки.
         /// </summary>
         [Required]
-        [ForeignKey("ParcelAutomat")]
         public int NumberPostDeliver { get; set; }
 
         /// <summary>
@@ -153,6 +152,7 @@ namespace WebApi.Models
                 }
                 else
                 {
+                    Console.WriteLine("Не корректный номер телефона");
                     throw new ValidationException(
                         OrderController.ResponseCode
                                                .RequestError
