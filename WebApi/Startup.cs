@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WebApi.Data.OrderRepo;
+using WebApi.Data.ParcelAutomatRepo;
 
 namespace WebApi
 {
@@ -29,6 +30,7 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IOrderRepo, MockOrderRepo>();
+            services.AddSingleton<IParcelAutomatRepo, MockParcelAutomatRepo>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

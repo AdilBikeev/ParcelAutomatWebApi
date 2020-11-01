@@ -7,6 +7,7 @@ using WebApi.Controlles;
 using Extensions;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Server.IIS.Core;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models 
 {
@@ -133,6 +134,7 @@ namespace WebApi.Models
         /// Номер постамата доставки.
         /// </summary>
         [Required]
+        [ForeignKey("ParcelAutomat")]
         public int NumberPostDeliver { get; set; }
 
         /// <summary>
