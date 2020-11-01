@@ -1,4 +1,5 @@
 # ParcelAutomatWebApi
+REST API для постамата.
 
 # Требования для запуска сервера
 1. Установить утилиту `dotnet` или Docker
